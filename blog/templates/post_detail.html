@@ -1,0 +1,30 @@
+{% extends 'base.html'%}
+
+{% block content %}
+    <div class="post-entry">
+        <h2> {{ post.title }} </h2>
+        <p>{{ post.body }}</p><br>
+        <p> By {{ post.author}}</p>
+
+    </div>
+
+    <a href="{% url 'post_edit' post.pk %}">+ Edit Blog Post</a>
+    <a href="{% url 'post_delete' post.pk %}">+ Delete Post</a>
+
+    <hr>
+        {% for comment in post.comments.all %}
+            {% if user.is_authenticated %}
+            <div class="comment">
+                <div class="date">
+                    {{ comment.created_date }}
+                </div>
+                <strong>{{ comment.author }}</strong>
+                <p>{{ comment.text|linebreaks }}</p>
+            </div>
+            {% endif %}
+        {% empty %}
+            <p>No comments here yet :(</p>
+        {% endfor %}
+    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+
+{% endblock %}
